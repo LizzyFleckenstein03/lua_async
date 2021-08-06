@@ -1,5 +1,6 @@
 lua_async.intervals = {
 	pool = {},
+	executing = {},
 	last_id = 0,
 }
 
@@ -18,10 +19,13 @@ end
 
 function clearInterval(id)
 	lua_async.intervals.pool[id] = nil
+	lua_async.intervals.executing[id] = nil
 end
 
 function lua_async.intervals.step(dtime)
-	for id, interval in pairs(lua_async.intervals.pool) do
+	lua_async.intervals.executing = table.copy(lua_async.intervals.pool)
+
+	for id, interval in pairs(lua_async.intervals.executing) do
 		interval.time_left = timeout.time_left - dtime
 
 		if interval.time_left <= 0 then
