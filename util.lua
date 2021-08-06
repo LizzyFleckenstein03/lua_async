@@ -11,3 +11,15 @@ function lua_async.sleep(ms)
 		setTimeout(resolve, ms)
 	end))
 end
+
+function lua_async.run()
+	local last_time = os.clock()
+
+	while true do
+		local current_time = os.clock()
+		local dtime = current_time - last_time
+		last_time = current_time
+
+		lua_async.step(dtime)
+	end
+end
