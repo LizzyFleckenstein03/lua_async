@@ -49,10 +49,42 @@ This function takes an ID of an existing interval and removes it, meaning it wil
 
 ### Immediates
 
-Immediates are processed every step after timeouts and intervals have been processed. An immediated is executed only once.
+Immediates are processed every step after timeouts and intervals have been processed. An immediate is executed only once.
 
 #### `id = setImmediate(callback, [...])`
 Registers a new immediate that will execute once in the current or the next step, depending on when it is registered. If an immediate is registered while immediates are processing, it will be executed in the next step. However, if an immediate is registered by a timeout or interval callback, the immediate _will_ process in the same step in which it was registered. `...` are the arguments passed to the `callback` function that is called when the immediate executes. `setImmediate` returns an unique numeric immediate ID that can be passed to `clearImmediate`. If `callback` is not a function, an error is raised when the immediate is executed.
 
 #### `clearImmediate(id)`
 This function takes an ID of an existing immediate and cancels it, meaning it will not execute. If `id` is not numeric, not a valid immediate id or the associated immediate has already executed or been cleared, `clearImmediate` does nothing. `id` may however not be `nil`. `clearImmediate` may be called on any immediate at any time, if immediates are currently processing the cleared immediate is removed from the list of immediates to process.
+
+### Utility functions
+
+#### `lua_async.yield()`
+Must be called from an async function.
+Yields the current thread and resumes its execution in the next (if called by an immediate) or current step (if called by an timeout or interval). This uses an immediate internally.
+
+#### `lua_async.kill_thread()`
+Must be called from an async function.
+Kills the current thread. This function _never returns_.
+
+#### `lua_async.sleep(ms)`
+Must be called from an async function.
+Sleeps for `ms` milliseconds and then resumes execution of the current thread. This uses a timeout internally.
+
+#### `lua_async.run()`
+Takes over the current thread and runs the event loop in a `while true` loop. It is highly recommended to only call this from the main thread, since async-old code being called from non-async functions cannot be detected otherwise.
+
+### Limiting
+
+Limiting can be used for basic scheduling. The way it works is that you can set a limit (in milliseconds) for the maximum time the current thread should get during each step. This way you can have a `while true` loop in your thread (or anything else that blocks for a longer time or ever forever) without disturbing the event loop. **Please note:** limits estimate the CPU time of the program, not the time the current thread was actually busy. If you `await` something or `sleep` / `yield`, the time that passed during the pause still counts.
+
+#### lua_async.set_limit(ms)
+Must be called from an async function.
+Sets the limit (in milliseconds) for the current thread.
+
+#### lua_async.unset_limit()
+Must be called from an async function.
+Removes the limit from the current thread.
+
+#### lua_async.check_limit()
+This function must be called every time you are ready for being interrupted. Only when this function is called the current thread may pause due to an exceeded limit, if you never call it, setting a limit is pretty much useless.
