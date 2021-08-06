@@ -1,3 +1,4 @@
+local unpack = unpack or table.unpack
 lua_async.timeouts = {
 	pool = {},
 	executing = {},

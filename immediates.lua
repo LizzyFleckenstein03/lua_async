@@ -1,3 +1,4 @@
+local unpack = unpack or table.unpack
 lua_async.immediates = {
 	pool = {},
 	executing = {},

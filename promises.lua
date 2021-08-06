@@ -1,3 +1,4 @@
+local unpack = unpack or table.unpack
 local PromisePrototype = {}
 
 function PromisePrototype:__run_handler(func, ...)

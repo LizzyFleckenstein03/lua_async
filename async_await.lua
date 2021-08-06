@@ -1,3 +1,5 @@
+local unpack = unpack or table.unpack
+
 function async(func)
 	return function(...)
 		local promise = Promise()
