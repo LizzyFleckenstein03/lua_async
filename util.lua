@@ -1,9 +1,7 @@
 function lua_async.yield()
-	local co = assert(coroutine.running(), "yield called outside of an async function")
-
-	setTimeout(lua_async.resume, 0, co)
-
-	coroutine.yield()
+	await(Promise(function(resolve)
+		setImmediate(resolve)
+	end))
 end
 
 function lua_async.kill_thread()
