@@ -1,5 +1,6 @@
 lua_async.immediates = {
 	pool = {},
+	executing = {},
 	last_id = 0,
 }
 
@@ -15,12 +16,15 @@ end
 
 function clearImmediate(id)
 	lua_async.immediates.pool[id] = nil
+	lua_async.immediates.executing[id] = nil
 end
 
 function lua_async.immediates.step(dtime)
-	for id, immediate in pairs(lua_async.immediates.pool) do
+	lua_async.immediates.executing = lua_async.immediates.pool
+	lua_async.immediates.pool = {}
+
+	for id, immediate in pairs(lua_async.immediates.executing) do
 		immediate.callback(unpack(immediate.args))
-		clearImmediate(id)
 	end
 end
 
