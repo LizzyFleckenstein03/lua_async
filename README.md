@@ -37,7 +37,7 @@ Registers a new timeout that will execute after `ms` milliseconds. If `ms` is no
 #### `clearTimeout(id)`
 This function takes an ID of an existing timeout that has not executed yet and cancels it, meaning it will not execute. If `id` is not numeric, not a valid timeout id or the associated timeout has expired or already been cleared, `clearTimeout` does nothing. `id` may however not be `nil`. `clearTimeout` may be called on any timeout at any time, if timeouts are currently processing the cleared timeout is removed from the list of timeouts to process.
 
-### Interval
+### Intervals
 
 Intervals are processed every step after timeouts have been processed. An interval is called every time a certain time elapsed, or every step.
 
