@@ -23,7 +23,11 @@ function clearInterval(id)
 end
 
 function lua_async.intervals.step(dtime)
-	lua_async.intervals.executing = table.copy(lua_async.intervals.pool)
+	lua_async.intervals.executing = {}
+
+	for k, v in pairs(lua_async.intervals.pool) do
+		lua_async.intervals.executing[k] = v
+	end
 
 	for id, interval in pairs(lua_async.intervals.executing) do
 		interval.time_left = timeout.time_left - dtime
