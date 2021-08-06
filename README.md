@@ -2,7 +2,7 @@
 This project aims to provide an API similar to the Node.js Event loop - for Lua, fully written in Lua itself. It works with Lua 5.1, but will be ported to work with 5.3.3 in the future.
 Note that the goal is not to clone the Node Event loop exactly.
 This is already fully usable, but some features are missing (Events, EventTargets, some Promise methods) and will be implemented in the near future.
-It also provides a few useful extra methods.
+It also provides a few useful extra methods as well as basic scheduling.
 
 ## Current features
 Current features are: timeouts, intervals, immediates, promises, async-await.
@@ -16,6 +16,8 @@ If you want to integrate this into your own project, note these things:
 - To initialize lua_async, require / dofile the init.lua. This returns a function; call this function with the path where the lua_async source code is located.
 
 ## API
+
+To take advantage of this API, you should probably know some JavaScript. However this is not required; Timeouts, Intervals, Immediates, Utility functions and Limiting are explained in a way that they can be understood without any extra knowledge; for Promises and async-await links to JS docs are provided since async-await / promises are really not trivial.
 
 ### The loop
 
@@ -36,6 +38,25 @@ Registers a new timeout that will execute after `ms` milliseconds. If `ms` is no
 
 #### `clearTimeout(id)`
 This function takes an ID of an existing timeout that has not executed yet and cancels it, meaning it will not execute. If `id` is not numeric, not a valid timeout id or the associated timeout has expired or already been cleared, `clearTimeout` does nothing. `id` may however not be `nil`. `clearTimeout` may be called on any timeout at any time, if timeouts are currently processing the cleared timeout is removed from the list of timeouts to process.
+
+#### Examples
+```lua
+function print_something(str, number)
+	print(str .. " " .. number)
+end
+
+setTimeout(print_something, 2000, "hello", 5) -- will print "hello 5" in 2 seconds
+
+setTimeout(function()
+	print("a timeout without ms argument")
+end) -- will print "a timeout without ms argument" in the next step
+
+local to = setTimeout(function()
+	print("i will never print")
+end, 500)
+
+clearTimeout(to) -- cancels the to timeout, nothing is printed
+```
 
 ### Intervals
 
