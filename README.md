@@ -63,13 +63,17 @@ This function takes an ID of an existing immediate and cancels it, meaning it wi
 Must be called from an async function.
 Yields the current thread and resumes its execution in the next (if called by an immediate) or current step (if called by an timeout or interval). This uses an immediate internally.
 
+#### `lua_async.sleep(ms)`
+Must be called from an async function.
+Sleeps for `ms` milliseconds and then resumes execution of the current thread. This uses a timeout internally.
+
 #### `lua_async.kill_thread()`
 Must be called from an async function.
 Kills the current thread. This function _never returns_.
 
-#### `lua_async.sleep(ms)`
-Must be called from an async function.
-Sleeps for `ms` milliseconds and then resumes execution of the current thread. This uses a timeout internally.
+#### `lua_async.resume(thread)`
+This function should only be used internally.
+Resumes execution of the thread `thread` and cleans up limiting data once finished. Also makes sure that if an error occurs it is thrown in the parent thread.
 
 #### `lua_async.run()`
 Takes over the current thread and runs the event loop in a `while true` loop. It is highly recommended to only call this from the main thread, since async-old code being called from non-async functions cannot be detected otherwise.
