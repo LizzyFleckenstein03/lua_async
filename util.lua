@@ -6,6 +6,10 @@ function lua_async.yield()
 	coroutine.yield()
 end
 
+function lua_async.kill_thread()
+	coroutine.yield(true)
+end
+
 function lua_async.sleep(ms)
 	await(Promise(function(resolve)
 		setTimeout(resolve, ms)
