@@ -44,6 +44,25 @@ function PromisePrototype:__reject_raw(reason)
 	assert(any_child, "Uncaught (in promise): " .. reason)
 end
 
+function PromisePrototype:then_(on_resolve, on_reject)
+	local promise = Promise()
+	promise.__on_resolve = on_resolve
+	promise.__on_reject = on_reject
+
+	self:__add_child(promise)
+
+	return promise
+end
+
+function PromisePrototype:catch(func)
+	local promise = Promise(function() end)
+	promise.__on_reject = func
+
+	self:__add_child(promise)
+
+	return promise
+end
+
 function PromisePrototype:resolve(...)
 	assert(self.state == "pending")
 
@@ -62,25 +81,6 @@ function PromisePrototype:reject(reason)
 	else
 		self:__reject_raw(reason)
 	end
-end
-
-function PromisePrototype:then_(on_resolve, on_reject)
-	local promise = Promise()
-	promise.__on_resolve = on_resolve
-	promise.__on_reject = on_reject
-
-	self:__add_child(promise)
-
-	return promise
-end
-
-function PromisePrototype:catch(func)
-	local promise = Promise(function() end)
-	promise.__on_reject = func
-
-	self:__add_child(promise)
-
-	return promise
 end
 
 Promise = setmetatable({}, {

@@ -57,6 +57,41 @@ Registers a new immediate that will execute once in the current or the next step
 #### `clearImmediate(id)`
 This function takes an ID of an existing immediate and cancels it, meaning it will not execute. If `id` is not numeric, not a valid immediate id or the associated immediate has already executed or been cleared, `clearImmediate` does nothing. `id` may however not be `nil`. `clearImmediate` may be called on any immediate at any time, if immediates are currently processing the cleared immediate is removed from the list of immediates to process.
 
+### Promises
+
+For an understanding of what promises are, please read https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise .
+The promise API differs a bit from JavaScript, but the concept is the same.
+If you look at the implementation of promises, you'll notice some methods and attributes in PromisePrototype that start with `__` and are not documented here. This is because they are internal methods / attributes and should not be used directly.
+
+#### `promise = Promise([function(resolve, reject)])`
+Equivalent of JS `new Promise()`. Returns a new pending promise. Unlike in JavaScript, the Promise resolver (argument passed to Promise()) may be nil and you can pass multiple values to `resolve(...)`.
+
+#### `promise.state`
+The current state of the promise ("pending" | "resolved" | "rejected")
+
+#### `promise.values`
+Only present in resolved promises. The arguments passed to the `resolve` function.
+
+#### `promise.reason`
+Only present in rejected promises. The argument passed to the `reject` function or the error that caused the promise to fail.
+
+#### `promise:then_(success, [fail])`
+Equivalent of JS `promise.then()`. Since `then` is a reserved keyword in Lua the underscore was added. Returns a new Promise that calls `fail` if the parent is rejected without the error being caught and `success` if the parent resolves. Unlike JavaScript, the `success` callback can recieve and return multiple values. `fail` is optional. No error is thrown if `success` is not omitted, so technically that is optional as well.
+
+#### `promise:catch(fail)`
+Equivalent of JS `promise.catch()`. Same as `promise:then_()` but only with the `fail` callback.
+
+#### `promise:resolve(...)`
+May only be called on pending promises.
+This is a method not present in JavaScript that has the same effect as calling the `resolve` function that is passed to the Promise resolver (Promise resolver = argument passed to Promise())
+
+#### `promise:reject(reason)`
+May only be called on pending promises.
+This is a method not present in JavaScript that has the same effect as calling the `reject` function that is passed to the Promise resolver (Promise resolver = argument passed to Promise())
+
+#### `promise = Promise.resolve(...)`
+Returns a new promise that is resolved with `...` as values.
+
 ### Utility functions
 
 #### `lua_async.yield()`
