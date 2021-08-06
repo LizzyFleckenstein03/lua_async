@@ -1,14 +1,15 @@
-lua_async.async_await = {}
+function async(func)
+	return function(...)
+		local promise = Promise()
+		promise.__on_resolve = func
 
-function lua_async.resume(co)
-	local status, err = coroutine.resume(co)
+		local args = {...}
 
-	if coroutine.status(co) == "dead" or err then
-		lua_async.limiting.unset_limit(co)
-	end
+		lua_async.resume(coroutine.create(function()
+			promise:resolve(unpack(args))
+		end))
 
-	if not status then
-		error("Error (in async function): " .. err)
+		return promise
 	end
 end
 
@@ -25,19 +26,3 @@ function await(promise)
 
 	return unpack(promise.values)
 end
-
-function async(func)
-	return function(...)
-		local promise = Promise()
-		promise.__on_resolve = func
-
-		local args = {...}
-
-		lua_async.resume(coroutine.create(function()
-			promise:resolve(unpack(args))
-		end))
-
-		return promise
-	end
-end
-
