@@ -67,7 +67,7 @@ end
 function PromisePrototype:then_(on_resolve, on_reject)
 	local promise = Promise()
 	promise.__on_resolve = on_resolve
-	promise.__on_reject = on_resolve
+	promise.__on_reject = on_reject
 
 	self:__add_child(promise)
 
