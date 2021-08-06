@@ -26,6 +26,7 @@ return function(path)
 		"async_await",
 		"util",
 		"limiting",
+		"events",
 	} do
 		dofile(path .. f .. ".lua")
 	end

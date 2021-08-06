@@ -1,7 +1,7 @@
 # lua_async
 This project aims to provide an API similar to the Node.js Event loop - for Lua, fully written in Lua itself. It is tested with Lua 5.1 and Lua 5.3.3, but should probably work with any Lua 5.x.
 Note that the goal is not to clone the Node Event loop exactly.
-This is already fully usable, but some features are missing (Events, EventTargets, some Promise methods) and will be implemented in the near future.
+This is already fully usable, but some features are missing (especially some Promise methods) and will be implemented in the near future.
 It also provides a few useful extra methods as well as basic scheduling.
 
 ## Current features

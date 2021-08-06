@@ -86,12 +86,10 @@ end
 
 Promise = setmetatable({}, {
 	__call = function(_, resolver)
-		local promise = {
+		local promise = setmetatable({
 			state = "pending",
 			__children = {},
-		}
-
-		setmetatable(promise, {__index = PromisePrototype})
+		}, {__index = PromisePrototype})
 
 		if resolver then
 			resolver(
