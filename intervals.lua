@@ -31,7 +31,7 @@ function lua_async.intervals.step(dtime)
 	end
 
 	for id, interval in pairs(lua_async.intervals.executing) do
-		interval.time_left = timeout.time_left - dtime
+		interval.time_left = interval.time_left - dtime
 
 		if interval.time_left <= 0 then
 			interval.callback(unpack(interval.args))
