@@ -1,5 +1,13 @@
 lua_async = {}
 
+if rawget(_G, "require") then
+	lua_async.socket = require("socket")
+end
+
+function lua_async.clock()
+	return lua_async.socket and lua_async.socket.gettime() or os.clock()
+end
+
 function lua_async.step(dtime)
 	-- timers phase
 	lua_async.timeouts.step(dtime)

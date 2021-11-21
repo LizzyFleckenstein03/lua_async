@@ -9,7 +9,7 @@ function Event(type, data)
 		type = type,
 		data = data,
 		defaultPrevented = false,
-		timeStamp = os.clock(),
+		timeStamp = lua_async.clock(),
 	}, {__index = EventPrototype})
 end
 
