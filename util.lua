@@ -39,11 +39,11 @@ function lua_async.run()
 
 		local next = math.huge
 
-		for _, timeout in pairs(lua_async.timeouts.pool)
+		for _, timeout in pairs(lua_async.timeouts.pool) do
 			next = math.min(next, timeout.time_left)
 		end
 
-		for _, interval in pairs(lua_async.intervals.pool)
+		for _, interval in pairs(lua_async.intervals.pool) do
 			next = math.min(next, interval.time_left)
 		end
 
@@ -51,6 +51,8 @@ function lua_async.run()
 			return
 		end
 
-		lua_async.socket.sleep(next)
+		if next > dtime then
+			lua_async.socket.sleep(next - dtime)
+		end
 	end
 end
