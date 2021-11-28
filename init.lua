@@ -1,9 +1,5 @@
 lua_async = {}
 
-if rawget(_G, "require") then
-	lua_async.socket = require("socket")
-end
-
 function lua_async.clock()
 	return lua_async.socket and lua_async.socket.gettime() or os.clock()
 end
@@ -25,7 +21,11 @@ function lua_async.step(dtime)
 	-- close phase is obsolete
 end
 
-return function(path)
+return function(path, no_socket)
+	if not no_socket then
+		lua_async.socket = require("socket")
+	end
+
 	for _, f in ipairs {
 		"timeouts",
 		"intervals",
