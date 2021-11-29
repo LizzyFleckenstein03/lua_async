@@ -39,6 +39,7 @@ function PromisePrototype:__reject_raw(reason)
 	local any_child = false
 
 	for _, child in ipairs(self.__children) do
+		any_child = true
 		child:reject(reason)
 	end
 
