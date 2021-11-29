@@ -18,13 +18,13 @@ local EventTargetPrototype = {}
 function EventTargetPrototype:dispatchEvent(event)
 	event.target = self
 
-	local callback = self["on" + event.type]
+	local callback = self["on" .. event.type]
 
 	if callback then
 		callback(event)
 	end
 
-	local listeners = self.__eventListeners[type]
+	local listeners = self.__eventListeners[event.type]
 
 	if listeners then
 		for i, callback in ipairs(listeners) do
