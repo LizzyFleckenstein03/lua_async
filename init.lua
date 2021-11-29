@@ -1,4 +1,6 @@
-lua_async = {}
+lua_async = {
+	poll_functions = {},
+}
 
 if rawget(_G, "require") then
 	lua_async.socket = require("socket")
@@ -13,11 +15,14 @@ function lua_async.step(dtime)
 	lua_async.timeouts.step(dtime)
 	lua_async.intervals.step(dtime)
 
-	-- pending callbacks phase is done by minetest
+	-- pending callbacks phase is obsolete
 
 	-- idle & prepare phase are obsolete
 
-	-- poll phase is obsolete
+	-- poll phase
+	for func in pairs(lua_async.poll_functions) do
+		func()
+	end
 
 	-- check phase
 	lua_async.immediates.step(dtime)
