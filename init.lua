@@ -41,6 +41,6 @@ return function(path)
 		"limiting",
 		"events",
 	} do
-		dofile(path .. f .. ".lua")
+		dofile(path .. "/" .. f .. ".lua")
 	end
 end
